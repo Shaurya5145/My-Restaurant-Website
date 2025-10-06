@@ -1,0 +1,285 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Make a Reservation - Lounge</title>
+
+    <script>
+        document.documentElement.classList.remove('no-js');
+        document.documentElement.classList.add('js');
+    </script>
+
+    <link rel="stylesheet" href="{% static 'home/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/vendor.css' %}">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'home/images/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'home/images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'home/images/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'home/site.webmanifest' %}">
+
+    <style>
+        /* ------------------------------------------------------------------- 
+         * GLOBAL AND LAYOUT FIXES
+         * ------------------------------------------------------------------- */
+        
+        /* Ensures padding is included in the element's width, preventing overflow */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* A fallback to hide horizontal overflow if any element is misbehaving */
+        body {
+            overflow-x: hidden;
+        }
+
+        /* The new, self-contained layout for the reservation section */
+        .reservation-layout {
+            display: flex;
+            flex-wrap: wrap; /* This is key: allows items to wrap to the next line */
+            gap: 4rem;       /* Creates space between the two columns */
+        }
+
+        /* Left column (Info) */
+        .reservation-info {
+            flex: 1; /* Allows the column to grow */
+            min-width: 320px; /* Crucial: The column will wrap if it can't be at least this wide */
+        }
+        
+        /* Right column (Form) */
+        .reservation-form-wrapper {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        /* ------------------------------------------------------------------- 
+         * General Page & Form Styles (Slightly adjusted)
+         * ------------------------------------------------------------------- */
+
+        .s-page-header {
+            padding-top: 14rem;
+            padding-bottom: 7rem;
+        }
+        
+        .s-reservation {
+            padding-top: 0;
+            padding-bottom: 12rem;
+        }
+
+        .reservation-form label {
+            font-family: var(--font-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .form-field {
+            margin-bottom: 24px;
+        }
+
+        .reservation-form input,
+        .reservation-form select,
+        .reservation-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-family: var(--font-secondary);
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+        .reservation-form input:focus,
+        .reservation-form select:focus,
+        .reservation-form textarea:focus {
+            outline: none;
+            border-color: #CD7F32; 
+            box-shadow: 0 0 0 2px rgba(205, 127, 50, 0.2);
+            background-color: #fff;
+        }
+
+        .reservation-form .btn--primary {
+            width: 100%;
+            margin-top: 16px;
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+        
+    </style>
+
+</head>
+
+
+<body id="top">
+
+    <div id="preloader">
+        <div id="loader" class="dots-fade"><div></div><div></div><div></div></div>
+    </div>
+
+    <div id="page" class="s-pagewrap">
+
+        <header class="s-header">
+            <div class="container s-header__content">
+                <div class="s-header__block">
+                    <div class="header-logo">
+                        <a class="logo" href="{% url 'index' %}">
+                            <img src="{% static 'home/images/logo.svg' %}" alt="Homepage">
+                        </a>
+                    </div>
+                    <a class="header-menu-toggle" href="#0"><span>Menu</span></a>
+                </div> 
+                <nav class="header-nav">
+                    <ul class="header-nav__links">
+                        <li><a href="{% url 'index' %}#intro">Intro</a></li>
+                        <li><a href="{% url 'index' %}#about">About</a></li>
+                        <li><a href="{% url 'index' %}#menu">Menu</a></li>
+                        <li><a href="{% url 'index' %}#gallery">Gallery</a></li>
+                        <li class="current"><a href="/reservation">Reservation</a></li>
+                        {% if user.is_authenticated %}
+                        <li><a href="/profile">Profile</a></li>
+                        <li><a href="/accounts/logout">Logout</a></li>
+                        {% else %}
+                        <li><a href="/accounts/login">Login</a></li>
+                        <li><a href="/accounts/signup">Signup</a></li>
+                        {% endif %}
+                    </ul>
+                    <div class="header-contact">
+                        <a href="tel:+" class="header-contact__num btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" width="24" height="24" color="#000000"><path d="M19.64,21.25c-2.54,2.55-8.38.83-13-3.84S.2,6.9,2.75,4.36L5.53,1.57,10.9,6.94l-2,2A2.18,2.18,0,0,0,8.9,12L12,15.1a2.18,2.18,0,0,0,3.07,0l2-2,5.37,5.37Z" style="fill:none;stroke:currentColor;stroke-miterlimit:10;"></path></svg>
+                            555-123-3456
+                        </a>
+                    </div>
+                </nav> 
+            </div>
+        </header>
+
+          <section class="s-page-header container">
+            <div class="reservation-layout">
+
+                <div class="reservation-info">
+                    <h1 class="text-display-title">Book Your Table</h1>
+                </div>
+
+                <div class="reservation-form-wrapper" aria-hidden="true"></div>
+
+            </div>
+        </section>
+
+        <section id="reservation" class="container s-reservation">
+            
+            <div class="reservation-layout">
+
+                <div class="reservation-info">
+                    <div class="section-header" data-num="01">
+                        <h2 class="text-display-title">Reservation Details</h2>
+                    </div>
+                    <p>
+                        We'd be delighted to host you. To ensure your table is ready upon arrival, please book in advance. For parties larger than 8, please contact us directly by phone.
+                    </p>
+                    <h6>Opening Hours</h6>
+                    <ul class="opening-hours">
+                        <li><span class="opening-hours__days">Weekdays</span><span class="opening-hours__time">10:00am - 9:00pm</span></li>
+                        <li><span class="opening-hours__days">Weekends</span><span class="opening-hours__time">9:00am - 10:00pm</span></li>
+                    </ul>
+                    <figure class="about-pic-primary">
+                        <img src="{% static 'home/images/gallery/gallery-05.jpg' %}" 
+                             srcset="{% static 'home/images/gallery/gallery-05.jpg' %} 1x, {% static 'home/images/gallery/gallery-05@2x.jpg' %} 2x" alt="A cozy table at Lounge Cafe">
+                    </figure>
+                </div>
+
+                <div class="reservation-form-wrapper">
+                    <form class="reservation-form" method="post" action="/reserve/">
+                        {% csrf_token %}
+                        <div class="form-field">
+                            <label for="guest-count">Number of Guests</label>
+                            <select id="guest-count" name="people">
+                                <option value="1">1 Person</option>
+                                <option value="2" selected>2 People</option>
+                                <option value="3">3 People</option>
+                                <option value="4">4 People</option>
+                                <option value="5">5 People</option>
+                                <option value="6">6 People</option>
+                                <option value="7">7 People</option>
+                                <option value="8">8 People</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="res-date">Date</label>
+                            <input type="date" id="res-date" name="date" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="res-time">Time</label>
+                            <input type="time" id="res-time" name="time" min="10:00" max="21:00" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="special-requests">Special Requests (Optional)</label>
+                            <textarea id="special-requests" name="dietary_restriction" rows="3" placeholder="e.g., dietary restrictions, high chair"></textarea>
+                        </div>
+                        <div class="form-field">
+                            <input type="submit" value="Confirm Reservation" class="btn btn--primary">
+                        </div>
+                    </form>
+                </div>
+
+            </div> 
+        </section>
+
+
+        <footer id="footer" class="container s-footer">
+            <div class="row s-footer__main">
+                 <div class="column xl-3 lg-12 footer-block s-footer__main-start">
+                     <div class="s-footer__logo">
+                         <a class="logo" href="{% url 'index' %}">
+                             <img src="{% static 'home/images/logo.svg' %}" alt="Homepage">
+                         </a>
+                     </div>
+                 </div>
+                 <div class="column xl-9 lg-12 s-footer__main-end grid-cols grid-cols--wrap">
+                     <div class="grid-cols__column footer-block">
+                         <h6>Location</h6>
+                         <p>456 Elm Street, Los Angeles <br>CA 90001</p>
+                     </div>
+                     <div class="grid-cols__column footer-block">
+                         <h6>Contacts</h6>
+                         <ul class="link-list">
+                             <li><a href="mailto:gshaurya948@gmail.com">gshaurya948@gmail.com</a></li>
+                             <li><a href="tel:+918126855153">8126855153</a></li>
+                         </ul>
+                     </div>
+                     <div class="grid-cols__column footer-block">
+                         <h6>Opening Hours</h6>
+                         <ul class="opening-hours">
+                             <li><span class="opening-hours__days">Weekdays</span><span class="opening-hours__time">10:00am - 9:00pm</span></li>
+                             <li><span class="opening-hours__days">Weekends</span><span class="opening-hours__time">9:00am - 10:00pm</span></li>
+                         </ul>
+                     </div>
+                 </div>
+             </div>
+             <div class="row s-footer__bottom">
+                 <div class="column xl-6 lg-12">
+                     <p class="ss-copyright">
+                         <span>© sCODER 2025</span>
+                         <span>Design by <a href="https://blog-hm8r.onrender.com/">SHAURYA GUPTA</a></span>
+                         Distributed by <a href="b" target="_blank">sCODER</a>
+                     </p>
+                 </div>
+             </div>
+             <div class="ss-go-top">
+                 <a class="smoothscroll" title="Back to Top" href="#top">
+                     <svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="m14.523 18.787s4.501-4.505 6.255-6.26c.146-.146.219-.338.219-.53s-.073-.383-.219-.53c-1.753-1.754-6.255-6.258-6.255-6.258-.144-.145-.334-.217-.524-.217-.193 0-.385.074-.532.221-.293.292-.295.766-.004 1.056l4.978 4.978h-14.692c-.414 0-.75.336-.75.75s.336.75.75.75h14.692l-4.979 4.979c-.289.289-.286.762.006 1.054.148.148.341.222.533.222.19 0 .378-.72.522-.215z" fill-rule="nonzero" /></svg>
+                 </a>
+                 <span>Back To Top</span>
+             </div>
+        </footer>
+
+    </div>
+
+    <script src="{% static 'home/js/plugins.js' %}"></script>
+    <script src="{% static 'home/js/main.js' %}"></script>
+
+</body>
+</html>
