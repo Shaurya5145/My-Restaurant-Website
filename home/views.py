@@ -123,7 +123,7 @@ def payment_success(request):
     except Exception:
         return HttpResponse("Payment verification failed.")
 
-# @receiver(post_save,sender=User)
-# def create_profile(sender,instance,created,**kwargs):
-#     if created:
-#         Profile.objects.get_or_create(user=instance)
+@receiver(post_save,sender=User)
+def create_profile(sender,instance,created,**kwargs):
+    if created:
+        Profile.objects.get_or_create(user=instance)
