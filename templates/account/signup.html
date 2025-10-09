@@ -15,96 +15,118 @@
       {% trans "Create Account" %}
     </h1>
     <p class="text-center text-gray-400 text-sm mb-6">
-      {% blocktranslate %}Join Lounge Cafe and enjoy your coffee experience.{% endblocktranslate %}
+      {% blocktranslate %}Join sCODER Kitchen and enjoy your coffee experience.{% endblocktranslate %}
     </p>
-
     <!-- Login notice -->
     {% setvar link %}
-        <a href="{{ login_url }}" class="text-gray-100 underline hover:text-white">
-    {% endsetvar %}
-    {% setvar end_link %}
-        </a>
+    <a href="{{ login_url }}" class="text-gray-100 underline hover:text-white">
+      {% endsetvar %}
+      {% setvar end_link %}
+    </a>
     {% endsetvar %}
     <p class="text-center text-sm text-gray-400 mb-6">
       {% blocktranslate %}Already have an account? {{ link }}Sign in{{ end_link }}.{% endblocktranslate %}
     </p>
 
     {% if not SOCIALACCOUNT_ONLY %}
-      {% url 'account_signup' as signup_url %}
-      <form method="post" action="{{ signup_url }}" class="space-y-4">
-        {% csrf_token %}
-        <!-- Username -->
-        {% if form.username %}
-        <div>
-          <input type="text" name="username" placeholder="{% trans 'Username' %}" required
-                 class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition"/>
-        </div>
+    {% url 'account_signup' as signup_url %}
+    <form method="post" action="{{ signup_url }}" class="space-y-4">
+      {% csrf_token %}
+      <!-- Username -->
+      {% if form.non_field_errors %}
+      <div class="text-red-400 text-sm bg-red-900/40 border border-red-800 rounded-lg p-3">
+        {{ form.non_field_errors }}
+      </div>
+      {% endif %}
+      {% if form.username %}
+      <div>
+        <input type="text" name="username" placeholder="{% trans 'Username' %}" required
+          class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition" />
+        {% if form.username.errors %}
+        <p class="text-red-400 text-sm mt-1">{{ form.username.errors.0 }}</p>
         {% endif %}
+      </div>
+      {% endif %}
 
-        <!-- Email -->
-        <div>
-          <input type="email" name="email" placeholder="{% trans 'Email address' %}" required
-                 class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition"/>
-        </div>
+      <!-- Email -->
+      <div>
+        <input type="email" name="email" placeholder="{% trans 'Email address' %}" required
+          class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition" />
+        {% if form.email.errors %}
+        <p class="text-red-400 text-sm mt-1">{{ form.email.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <!-- Password -->
-        <div>
-          <input type="password" name="password1" placeholder="{% trans 'Password' %}" required
-                 class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition"/>
-        </div>
+      <!-- Password -->
+      <div>
+        <input type="password" name="password1" placeholder="{% trans 'Password' %}" required
+          class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition" />
+        {% if form.password1.errors %}
+        <p class="text-red-400 text-sm mt-1">{{ form.password1.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        <!-- Confirm Password -->
-        <div>
-          <input type="password" name="password2" placeholder="{% trans 'Confirm Password' %}" required
-                 class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition"/>
-        </div>
+      <!-- Confirm Password -->
+      <div>
+        <input type="password" name="password2" placeholder="{% trans 'Confirm Password' %}" required
+          class="w-full bg-[#1a1a1a] text-gray-100 placeholder-gray-500 rounded-lg px-4 py-3 text-sm border border-[#2a2a2a] focus:outline-none focus:border-gray-400 transition" />
+        {% if form.password2.errors %}
+        <p class="text-red-400 text-sm mt-1">{{ form.password2.errors.0 }}</p>
+        {% endif %}
+      </div>
 
-        {{ redirect_field }}
+      {{ redirect_field }}
 
-        <!-- Submit -->
-        <button type="submit"
-                class="w-full bg-gray-100 text-[#111111] font-semibold py-3 rounded-lg hover:bg-gray-300 transition">
-          {% trans "Sign Up" %}
-        </button>
-      </form>
+      <!-- Submit -->
+      <button type="submit"
+        class="w-full bg-gray-100 text-[#111111] font-semibold py-3 rounded-lg hover:bg-gray-300 transition">
+        {% trans "Sign Up" %}
+      </button>
+    </form>
     {% endif %}
 
     {% if SOCIALACCOUNT_ENABLED %}
-      <div class="flex items-center my-6">
-        <div class="flex-grow border-t border-[#2a2a2a]"></div>
-        <span class="mx-3 text-gray-500 text-sm">{% trans "or" %}</span>
-        <div class="flex-grow border-t border-[#2a2a2a]"></div>
-      </div>
+    <div class="flex items-center my-6">
+      <div class="flex-grow border-t border-[#2a2a2a]"></div>
+      <span class="mx-3 text-gray-500 text-sm">{% trans "or" %}</span>
+      <div class="flex-grow border-t border-[#2a2a2a]"></div>
+    </div>
 
-      {% get_providers as socialaccount_providers %}
-      {% if socialaccount_providers %}
-        <div class="space-y-3">
-          {% for provider in socialaccount_providers %}
-            {% provider_login_url provider.id process='signup' as login_url %}
-            {% if provider.id == "google" %}
-              <a href="{{ login_url }}"
-                 class="flex items-center justify-center w-full bg-white text-gray-800 font-medium py-3 rounded-lg border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
-                  <path fill="#4285F4" d="M533.5 278.4c0-18.5-1.6-37.2-4.9-55.1H272v104.4h147.1c-6.4 34.6-26 63.9-55.3 83.5v69.4h89.4c52.3-48.2 82.3-119 82.3-202.2z"/>
-                  <path fill="#34A853" d="M272 544.3c73.6 0 135.3-24.7 180.5-67.1l-89.4-69.4c-24.7 16.6-56.4 26.4-91.1 26.4-69.9 0-129.2-47.1-150.4-110.4H29.3v69.3C74.6 487 167.2 544.3 272 544.3z"/>
-                  <path fill="#FBBC05" d="M121.6 329.7c-5.6-16.6-8.8-34.3-8.8-52.4s3.2-35.8 8.8-52.4V155.6H29.3C10.5 196.4 0 241.3 0 277.3s10.5 80.9 29.3 121.7l92.3-69.3z"/>
-                  <path fill="#EA4335" d="M272 108.7c39.9 0 75.8 13.7 104 40.7l78-78C402.6 26.1 336.5 0 272 0 167.2 0 74.6 57.3 29.3 144.3l92.3 69.3C142.8 155.8 202.1 108.7 272 108.7z"/>
-                </svg>
-                <span>Sign up with Google</span>
-              </a>
-            {% else %}
-              <a href="{{ login_url }}"
-                 class="block w-full bg-gray-800 text-white text-center py-3 rounded-lg hover:bg-gray-700 transition">
-                Sign up with {{ provider.name }}
-              </a>
-            {% endif %}
-          {% endfor %}
-        </div>
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+    <div class="space-y-3">
+      {% for provider in socialaccount_providers %}
+      {% provider_login_url provider.id process='signup' as login_url %}
+      {% if provider.id == "google" %}
+      <a href="{{ login_url }}"
+        class="flex items-center justify-center w-full bg-white text-gray-800 font-medium py-3 rounded-lg border border-gray-300 shadow-sm hover:shadow-md hover:bg-gray-50 transition">
+        <svg class="w-5 h-5 mr-3" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4"
+            d="M533.5 278.4c0-18.5-1.6-37.2-4.9-55.1H272v104.4h147.1c-6.4 34.6-26 63.9-55.3 83.5v69.4h89.4c52.3-48.2 82.3-119 82.3-202.2z" />
+          <path fill="#34A853"
+            d="M272 544.3c73.6 0 135.3-24.7 180.5-67.1l-89.4-69.4c-24.7 16.6-56.4 26.4-91.1 26.4-69.9 0-129.2-47.1-150.4-110.4H29.3v69.3C74.6 487 167.2 544.3 272 544.3z" />
+          <path fill="#FBBC05"
+            d="M121.6 329.7c-5.6-16.6-8.8-34.3-8.8-52.4s3.2-35.8 8.8-52.4V155.6H29.3C10.5 196.4 0 241.3 0 277.3s10.5 80.9 29.3 121.7l92.3-69.3z" />
+          <path fill="#EA4335"
+            d="M272 108.7c39.9 0 75.8 13.7 104 40.7l78-78C402.6 26.1 336.5 0 272 0 167.2 0 74.6 57.3 29.3 144.3l92.3 69.3C142.8 155.8 202.1 108.7 272 108.7z" />
+        </svg>
+        <span>Sign up with Google</span>
+      </a>
+      {% else %}
+      <a href="{{ login_url }}"
+        class="block w-full bg-gray-800 text-white text-center py-3 rounded-lg hover:bg-gray-700 transition">
+        Sign up with {{ provider.name }}
+      </a>
       {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
     {% endif %}
   </div>
 </div>
 
 <!-- Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@500;700&display=swap"
+  rel="stylesheet">
 {% endblock content %}
