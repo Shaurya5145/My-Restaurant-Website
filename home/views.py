@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect,HttpResponse
+from django.shortcuts import render, redirect, HttpResponse
 from .models import Category, Item, Bookmark, Profile, Reservation
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -9,10 +9,31 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import Profile
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from allauth.account.signals import user_signed_up
 
 import razorpay
 
 client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+
+def send_welcome_email(user):
+    subject = "🍴 Welcome to Your Restaurant!"
+    from_email = settings.DEFAULT_FROM_EMAIL
+    to_email = user.email
+
+    context = {
+        "user": user,
+    }
+
+    html_content = render_to_string('emails/welcome_email.html', context)
+    msg = EmailMultiAlternatives(subject, html_content, from_email, [to_email])
+    msg.send()
+
+@receiver(user_signed_up)
+def send_email_on_signup(request, user, **kwargs):
+    send_welcome_email(user)
 
 
 # Create your views here.
@@ -123,7 +144,8 @@ def payment_success(request):
     except Exception:
         return HttpResponse("Payment verification failed.")
 
-@receiver(post_save,sender=User)
-def create_profile(sender,instance,created,**kwargs):
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.get_or_create(user=instance)
